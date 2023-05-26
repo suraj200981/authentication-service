@@ -23,6 +23,7 @@ public class RegistrationController {
     public ResponseEntity<String> registerUser(@RequestBody Register regVals) {
 
         Register newUser = new Register();
+
         if (regVals != null) {
             newUser.setFirstName(regVals.getFirstName());
             newUser.setLastName(regVals.getLastName());
