@@ -4,12 +4,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "registered_users")
-public class Register {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -18,6 +17,7 @@ public class Register {
     private String lastName;
     private String emailAddress;
     private String password;
+    private String accountType;
     private LocalDateTime accountCreatedAt;
 
 }

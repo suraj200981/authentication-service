@@ -1,8 +1,9 @@
 package com.example.url.shortner.microservices.authenticationservice.controller;
 
 
-import com.example.url.shortner.microservices.authenticationservice.model.Register;
-import com.example.url.shortner.microservices.authenticationservice.repository.RegisterRepository;
+import com.example.url.shortner.microservices.authenticationservice.model.User;
+import com.example.url.shortner.microservices.authenticationservice.repository.UsersRepository;
+import com.example.url.shortner.microservices.authenticationservice.utils.validators.FirstNameValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +18,27 @@ import java.time.LocalDateTime;
 public class RegistrationController {
 
     @Autowired
-    RegisterRepository repo;
+    UsersRepository repo;
+
+    @Autowired
+    FirstNameValidator firstNameValidator;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody Register regVals) {
+    public ResponseEntity<String> registerUser(@RequestBody User regVals) {
 
-        Register newUser = new Register();
+        User newUser = new User();
 
         if (regVals != null) {
+            if (firstNameValidator.isValid(regVals.getFirstName().toLowerCase())) {
+                newUser.setFirstName(regVals.getFirstName());
+
+            } else {
+                return new ResponseEntity<>("First name is incorrect", HttpStatus.BAD_REQUEST);
+            }
             newUser.setFirstName(regVals.getFirstName());
             newUser.setLastName(regVals.getLastName());
             newUser.setEmailAddress(regVals.getEmailAddress());
+            newUser.setAccountType(regVals.getAccountType());
             newUser.setAccountCreatedAt(LocalDateTime.now());
             String encodedPassword = new BCryptPasswordEncoder().encode(regVals.getPassword());
             newUser.setPassword(encodedPassword);

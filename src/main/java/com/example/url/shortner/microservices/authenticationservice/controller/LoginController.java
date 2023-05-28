@@ -1,8 +1,8 @@
 package com.example.url.shortner.microservices.authenticationservice.controller;
 
 import com.example.url.shortner.microservices.authenticationservice.model.Login;
-import com.example.url.shortner.microservices.authenticationservice.model.Register;
-import com.example.url.shortner.microservices.authenticationservice.repository.RegisterRepository;
+import com.example.url.shortner.microservices.authenticationservice.model.User;
+import com.example.url.shortner.microservices.authenticationservice.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +17,14 @@ import java.util.Optional;
 public class LoginController {
 
     @Autowired
-    RegisterRepository repo;
+    UsersRepository repo;
 
     @PostMapping("/login")
     public ResponseEntity<String> userLogin(@RequestBody Login login) {
 
-        Register search = new Register();
+        User search = new User();
         search.setEmailAddress(login.getEmail());
-        Optional<Register> foundUser = Optional.ofNullable(repo.findByemailAddress(search.getEmailAddress()));
+        Optional<User> foundUser = Optional.ofNullable(repo.findByemailAddress(search.getEmailAddress()));
 
         if (foundUser.isPresent()) {
             if (login.getEmail().equals(foundUser.get().getEmailAddress())) {
